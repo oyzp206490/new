@@ -6,6 +6,8 @@ import router from './router'
 import store from './store/index'
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
+import less from 'less'
+Vue.use(less)
 Vue.use(ViewUI);
 Vue.config.productionTip = false
 
