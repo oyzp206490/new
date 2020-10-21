@@ -3,12 +3,6 @@
   <div class="layout">
     <Layout>
       <Header></Header>
-      <!-- <Header>
-        <Menu mode="horizontal" theme="dark" active-name="1">
-          <div class="layout-logo"></div>
-          <div class="layout-nav"></div>
-        </Menu>
-      </Header> -->
     </Layout>
     <Layout :style="{ minHeight: '90vh' }">
       <Sider
@@ -60,5 +54,4 @@ export default {
   background: #fff;
   // border: 1px solid;
 }
-
 </style>
