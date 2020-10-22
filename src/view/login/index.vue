@@ -1,7 +1,15 @@
 <template>
   <div class="boy">
     <div class="box">
-      <p class="title">后台管理登录</p>
+      <div class="tab-bar">
+        <ul>
+          <li :class="{ lis: login }" @mouseover="logn(1)">我要登录</li>
+          <li :class="{ lis: regis }" @mouseover="logn(2)">我要注册</li>
+        </ul>
+        <!-- <div>我要登录</div>
+        <div>我要注册</div> -->
+      </div>
+      <p class="title">{{title}}</p>
       <div class="from">
         <Form
           ref="formInline"
@@ -28,15 +36,14 @@
             >
               <Icon type="ios-lock-outline" slot="prepend"></Icon>
             </Input>
-            <a style='float:right;color:red' >用户注册</a>
           </FormItem>
-          <FormItem>
+          <FormItem v-if='login'>
             <Checkbox v-model="single">记住密码</Checkbox><br />
             <Checkbox v-model="single">自动登录</Checkbox>
           </FormItem>
           <FormItem>
             <Button long type="primary" @click="handleSubmit('formInline')"
-              >Signin</Button
+              >{{login ? '登录':'注册'}}</Button
             >
           </FormItem>
         </Form>
@@ -52,7 +59,10 @@ export default {
         user: "",
         password: "",
       },
-      single:'',
+      single: "",
+      login: true,
+      regis: false,
+      title:'后台管理登录',
       ruleInline: {
         user: [
           {
@@ -77,17 +87,28 @@ export default {
       },
     };
   },
-  methods:{
-    handleSubmit(name){
-        this.$refs[name].validate((valid) => {
-            if(valid){
-                this.$router.push('/')
-            }else {
-                this.$Message.error('Fail!');
-            }
-        })
-    }  
-  }
+  methods: {
+    logn(val) {
+      if (val === 1) {
+        this.login = true;
+        this.regis = false;
+        this.title = '后台管理登录'
+      } else if (val === 2) {
+        this.login = false;
+        this.regis = true;
+        this.title = '后台管理注册'
+      }
+    },
+    handleSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.$router.push("/");
+        } else {
+          this.$Message.error("Fail!");
+        }
+      });
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -98,9 +119,9 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
- /deep/ .ivu-form-item-required{
-     height: 35px;
- }
+  /deep/ .ivu-form-item-required {
+    height: 35px;
+  }
   .box {
     width: 400px;
     height: 400px;
@@ -110,10 +131,32 @@ export default {
     transform: translate(-50%, -50%);
     background-color: darkgrey;
     background-color: rgba(255, 255, 255, 0.3);
-
+    .tab-bar {
+      height: 50px;
+      ul {
+        text-align: center;
+        line-height: 50px;
+        font-size: 15px;
+        display: flex;
+        li {
+          flex: 1;
+          // border: 1px solid;
+          background-color: darkgray;
+          list-style-type: none;
+          cursor: pointer;
+        }
+        .lis {
+          background-color: darkgrey;
+          background-color: rgba(255, 255, 255, 0.3);
+        }
+      }
+    }
+    // .tab-bar:hover div {
+    //   background-color: darkblue;
+    // }
     .title {
       text-align: center;
-      margin-top: 57px;
+      margin-top: 10px;
       font-size: 30px;
     }
     .from {

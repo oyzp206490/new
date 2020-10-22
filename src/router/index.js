@@ -8,23 +8,22 @@ export default new Router({
   routes: [
     {
       path: '/',
+      component: HelloWorld
+    },
+    {
+      path: '/home',
       name: 'HelloWorld',
       component: HelloWorld
     },
     {
       path: '/login',
       name: 'login',
-      component:()=> import('@/view/login/index')
+      component: () => import('@/view/login/index')
     },
     {
       path: '/modify',
       name: 'modify',
-      component:()=> import('@/view/user/modify')
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component:()=> import('@/view/user/register')
-    },
+      component: () => import('@/view/user/modify')
+    }
   ]
 })

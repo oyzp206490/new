@@ -1,43 +1,49 @@
 <template>
   <div>
-    <Menu active-name="1-2" theme="dark" width="auto" :class="classmenu">
+    <Menu active-name="home" theme="dark" width="auto" :class="classmenu">
       <Input v-model="value" placeholder="搜索" style="width: 100%" />
 
-      <Submenu name="1">
-        <template slot="title">
-          <Icon type="ios-navigate"></Icon>
-          <span>Item 1</span>
-        </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-      </Submenu>
-      <Submenu name="2">
-        <template slot="title">
-          <Icon type="ios-keypad"></Icon>
-          <span>Item 2</span>
-        </template>
-        <MenuItem name="2-1">Option 1</MenuItem>
-        <MenuItem name="2-2">Option 2</MenuItem>
-      </Submenu>
-      <Submenu name="3">
-        <template slot="title">
-          <Icon type="ios-analytics"></Icon>
-          <span>Item 3</span>
-        </template>
-        <MenuItem name="3-1">Option 1</MenuItem>
-        <MenuItem name="3-2">Option 2</MenuItem>
-      </Submenu>
+      <template v-for="(menuItem, menuIndex) in menuList">
+        <MenuItem
+          v-if="!menuItem.children || menuItem.children.length == 0"
+          :key="menuIndex"
+          :name="menuItem.value"
+          class="menu"
+          :to="menuItem.to"
+        >
+          <Icon :type="menuItem.icon" />
+          <span>{{ menuItem.name }}</span>
+        </MenuItem>
+        <Submenu v-else :name="menuItem.value">
+          <template slot="title" class="menu">
+            <Icon :type="menuItem.icon"></Icon>
+            <span>{{ menuItem.name }}</span>
+          </template>
+          <MenuItem
+            v-for="(item, index) in menuItem.children"
+            :key="index"
+            :name="item.value"
+            :to="item.to"
+          >
+            {{ item.name }}</MenuItem
+          >
+        </Submenu>
+      </template>
     </Menu>
   </div>
 </template>
 <script>
+import { menuList } from "@/ulits/set";
 export default {
   props: ["classmenu"],
   data() {
     return {
       value: "",
+      menuList: [],
     };
+  },
+  mounted() {
+    this.menuList = menuList;
   },
 };
 </script>
