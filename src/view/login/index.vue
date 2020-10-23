@@ -9,7 +9,7 @@
         <!-- <div>我要登录</div>
         <div>我要注册</div> -->
       </div>
-      <p class="title">{{title}}</p>
+      <p class="title">{{ title }}</p>
       <div class="from">
         <Form
           ref="formInline"
@@ -18,15 +18,30 @@
           class="boxd"
         >
           <FormItem prop="user">
-            <Input
-              type="text"
-              v-model="formInline.user"
-              placeholder="用户"
-              clearable
-            >
-              <Icon type="ios-person-outline" slot="prepend"></Icon>
-            </Input>
+            <div class="use" @mouseenter="enter" @mouseleave="leave">
+              <Input
+                type="text"
+                v-model="formInline.user"
+                placeholder="Username"
+                @on-change="include"
+              >
+                <Icon type="ios-person-outline" slot="prepend"></Icon>
+              </Input>
+
+              <div class="users" v-if="show">
+                <ul>
+                  <li
+                    @click="query(item)"
+                    v-for="(item, index) in user"
+                    :key="index"
+                  >
+                    {{ item }}
+                  </li>
+                </ul>
+              </div>
+            </div>
           </FormItem>
+
           <FormItem prop="password">
             <Input
               type="password"
@@ -37,14 +52,14 @@
               <Icon type="ios-lock-outline" slot="prepend"></Icon>
             </Input>
           </FormItem>
-          <FormItem v-if='login'>
-            <Checkbox v-model="single">记住密码</Checkbox><br />
+          <FormItem v-if="login">
+            <Checkbox v-model="username">记住用户名</Checkbox><br />
             <Checkbox v-model="single">自动登录</Checkbox>
           </FormItem>
           <FormItem>
-            <Button long type="primary" @click="handleSubmit('formInline')"
-              >{{login ? '登录':'注册'}}</Button
-            >
+            <Button long type="primary" @click="handleSubmit('formInline')">{{
+              login ? "登录" : "注册"
+            }}</Button>
           </FormItem>
         </Form>
       </div>
@@ -59,10 +74,13 @@ export default {
         user: "",
         password: "",
       },
-      single: "",
+      single: false,
       login: true,
+      username: false,
       regis: false,
-      title:'后台管理登录',
+      show: false,
+      user: [],
+      title: "后台管理登录",
       ruleInline: {
         user: [
           {
@@ -87,22 +105,59 @@ export default {
       },
     };
   },
+  mounted() {
+    // document.addEventListener('click', this.handleWinFocus);
+    this.user = localStorage.getItem("userName")
+      ? JSON.parse(localStorage.getItem("userName"))
+      : [];
+    // console.log(user);
+  },
   methods: {
+    // 模糊查询
+    include(val) {
+      console.log(val)
+    },
+    // 移入
+    enter() {
+      if (this.user.length > 0) {
+        this.show = true;
+      } else {
+        this.show = false;
+      }
+    },
+    // 选择数据
+    query(val) {
+      this.formInline.user = val;
+      console.log(val);
+    },
+    // 移出
+    leave() {
+      this.show = false;
+    },
+
     logn(val) {
       if (val === 1) {
         this.login = true;
         this.regis = false;
-        this.title = '后台管理登录'
+        this.title = "后台管理登录";
       } else if (val === 2) {
         this.login = false;
         this.regis = true;
-        this.title = '后台管理注册'
+        this.title = "后台管理注册";
       }
     },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.$router.push("/");
+          if (this.username) {
+            let user = localStorage.getItem("userName")
+              ? JSON.parse(localStorage.getItem("userName"))
+              : [];
+            user.push(this.formInline.user);
+            user = [...new Set(user)];
+            localStorage.setItem("userName", JSON.stringify(user));
+          }
         } else {
           this.$Message.error("Fail!");
         }
@@ -112,6 +167,26 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+ul {
+  list-style-type: none;
+  padding: 10px;
+  li {
+    cursor: pointer;
+  }
+  :hover {
+    background-color: #cccccc;
+  }
+}
+.users {
+  width: 268px;
+  height: auto;
+  max-height: 160px;
+  overflow: auto;
+  background-color: cornsilk;
+  position: absolute;
+  left: 30px;
+  z-index: 99;
+}
 .boy {
   width: 100%;
   height: 100%;
@@ -134,6 +209,7 @@ export default {
     .tab-bar {
       height: 50px;
       ul {
+        padding: 0px;
         text-align: center;
         line-height: 50px;
         font-size: 15px;
