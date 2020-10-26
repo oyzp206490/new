@@ -18,21 +18,25 @@
           class="boxd"
         >
           <FormItem prop="user">
-            <div class="use" @mouseenter="enter" @mouseleave="leave">
+            <div class="use">
               <Input
                 type="text"
                 v-model="formInline.user"
                 placeholder="Username"
-                @on-change="include"
+                @on-change="enter"
+                @on-focus="focus"
+                @on-blur="blur"
+                clearable
               >
+                <!-- @mouseleave="leave" -->
                 <Icon type="ios-person-outline" slot="prepend"></Icon>
               </Input>
 
               <div class="users" v-if="show">
                 <ul>
                   <li
-                    @click="query(item)"
-                    v-for="(item, index) in user"
+                    @mousedown="query(item)"
+                    v-for="(item, index) in fSearch"
                     :key="index"
                   >
                     {{ item }}
@@ -80,6 +84,8 @@ export default {
       regis: false,
       show: false,
       user: [],
+      ary: [],
+      hide: true,
       title: "后台管理登录",
       ruleInline: {
         user: [
@@ -105,34 +111,42 @@ export default {
       },
     };
   },
+
   mounted() {
     // document.addEventListener('click', this.handleWinFocus);
     this.user = localStorage.getItem("userName")
       ? JSON.parse(localStorage.getItem("userName"))
       : [];
-    // console.log(user);
   },
-  methods: {
+  computed: {
     // 模糊查询
-    include(val) {
-      console.log(val)
+    fSearch() {
+      if (this.formInline.user) {
+        return this.user.filter((value) => {
+          //过滤数组元素
+          return value.includes(this.formInline.user); //如果包含字符返回true
+        });
+      } else {
+        return this.user;
+      }
     },
+  },
+
+  methods: {
     // 移入
     enter() {
-      if (this.user.length > 0) {
-        this.show = true;
-      } else {
-        this.show = false;
-      }
+      this.show = true;
+    },
+    focus() {
+      this.show = true;
+    },
+    blur() {
+      this.show = false;
     },
     // 选择数据
     query(val) {
-      this.formInline.user = val;
-      console.log(val);
-    },
-    // 移出
-    leave() {
       this.show = false;
+      this.formInline.user = val;
     },
 
     logn(val) {
@@ -169,9 +183,10 @@ export default {
 <style lang="less" scoped>
 ul {
   list-style-type: none;
-  padding: 10px;
+
   li {
     cursor: pointer;
+    padding: 10px;
   }
   :hover {
     background-color: #cccccc;
@@ -181,6 +196,7 @@ ul {
   width: 268px;
   height: auto;
   max-height: 160px;
+  min-height: 0px;
   overflow: auto;
   background-color: cornsilk;
   position: absolute;
@@ -227,9 +243,7 @@ ul {
         }
       }
     }
-    // .tab-bar:hover div {
-    //   background-color: darkblue;
-    // }
+
     .title {
       text-align: center;
       margin-top: 10px;
