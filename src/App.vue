@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <template v-if="$route.path === '/login'">
-     <router-view />
+      <router-view />
     </template>
     <div class="layout" v-else>
       <Layout>

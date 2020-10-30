@@ -58,7 +58,7 @@
           </FormItem>
           <FormItem v-if="login">
             <Checkbox v-model="username">记住用户名</Checkbox><br />
-            <Checkbox v-model="single">自动登录</Checkbox>
+            <Checkbox v-model="single" @on-change="check">自动登录</Checkbox>
           </FormItem>
           <FormItem>
             <Button long type="primary" @click="handleSubmit('formInline')">{{
@@ -131,7 +131,16 @@ export default {
       }
     },
   },
-
+  created() {
+    var _self = this;
+    document.onkeydown = function (e) {
+      var key = window.event.keyCode;
+      if (key == 13 || key == 100) {
+        _self.handleSubmit('formInline')
+        // _self.handleSubmit2("ruleForm2");
+      }
+    };
+  },
   methods: {
     // 移入
     enter() {
@@ -148,7 +157,15 @@ export default {
       this.show = false;
       this.formInline.user = val;
     },
-
+    check(val) {
+      if (val) {
+        this.$nextTick(() => {
+          if (localStorage.getItem("Authorization")) {
+            this.$router.push("/");
+          }
+        });
+      }
+    },
     logn(val) {
       if (val === 1) {
         this.login = true;
@@ -163,7 +180,8 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$router.push("/");
+          localStorage.setItem("Authorization", "123");
+
           if (this.username) {
             let user = localStorage.getItem("userName")
               ? JSON.parse(localStorage.getItem("userName"))
@@ -172,6 +190,7 @@ export default {
             user = [...new Set(user)];
             localStorage.setItem("userName", JSON.stringify(user));
           }
+          this.$router.push("/");
         } else {
           this.$Message.error("Fail!");
         }
@@ -236,6 +255,7 @@ ul {
           background-color: darkgray;
           list-style-type: none;
           cursor: pointer;
+          padding: 0px;
         }
         .lis {
           background-color: darkgrey;

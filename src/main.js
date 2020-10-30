@@ -11,6 +11,7 @@ Vue.use(less)
 Vue.use(ViewUI);
 Vue.config.productionTip = false
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -19,3 +20,4 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
