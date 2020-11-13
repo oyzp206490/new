@@ -14,7 +14,7 @@
               <a src="#" class="nav_avatar">
                 <Icon type="ios-log-out" class="nav_img" />修改密码</a
               >
-              <a src="#" class="nav_avatar" @click='out'>
+              <a src="#" class="nav_avatar" @click="out">
                 <Icon type="ios-lock" class="nav_img" />退出登录</a
               >
               <a src="#" class="nav_avatar">
@@ -29,11 +29,11 @@
 </template>
 <script>
 export default {
-  methods:{
-    out(){
-      this.$router.push('/login')
-    }
-  }
+  methods: {
+    out() {
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

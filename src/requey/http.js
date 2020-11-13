@@ -3,10 +3,10 @@ import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据，�
 import store from '@/store/index';
 
 if (process.env.NODE_ENV == 'development') {
-    // axios.defaults.baseURL = 'https://www.baidu.com';
+    axios.defaults.baseURL = '/apis';
 }
 else if (process.env.NODE_ENV == 'production') {
-    // axios.defaults.baseURL = 'https://www.ceshi.com';
+    axios.defaults.baseURL = '/apis';
 }
 
 axios.defaults.timeout = 10000;
@@ -39,7 +39,29 @@ axios.interceptors.response.use(
         // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据     
         // 否则的话抛出错误
         if (response.status === 200) {
-            return Promise.resolve(response);
+            switch (response.data.code) {
+				case 200:
+					return Promise.resolve(response);
+					break;
+				case 401:
+					// localStorage.clear();
+					localStorage.removeItem('token');
+					// store.commit('loginSuccess', null);
+					router.replace({
+						path: '/login',
+						query: { redirect: router.currentRoute.fullPath }
+					});
+					break;
+				case 404:
+					router.replace({
+						path: '/404',
+						query: { redirect: router.currentRoute.fullPath }
+					});
+					break;
+				default:
+					Message.error(response.data.message);
+			}
+            // return Promise.resolve(response);
         } else {
             return Promise.reject(response);
         }

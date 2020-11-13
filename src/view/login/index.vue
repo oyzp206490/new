@@ -17,11 +17,11 @@
           :rules="ruleInline"
           class="boxd"
         >
-          <FormItem prop="user">
+          <FormItem prop="loginame">
             <div class="use">
               <Input
                 type="text"
-                v-model="formInline.user"
+                v-model="formInline.loginame"
                 placeholder="Username"
                 @on-change="enter"
                 @on-focus="focus"
@@ -71,12 +71,14 @@
   </div>
 </template>
 <script>
+import { login } from "../../requey/api";
+import local from '../../local/index'
 export default {
   data() {
     return {
       formInline: {
-        user: "",
-        password: "",
+        loginame: "admin",
+        password: "14551",
       },
       single: false,
       login: true,
@@ -88,7 +90,7 @@ export default {
       hide: true,
       title: "后台管理登录",
       ruleInline: {
-        user: [
+        loginame: [
           {
             required: true,
             message: "用户名不能为空",
@@ -103,7 +105,7 @@ export default {
           },
           {
             type: "string",
-            min: 6,
+            min: 4,
             message: "密码长度为6",
             trigger: "blur",
           },
@@ -136,7 +138,7 @@ export default {
     document.onkeydown = function (e) {
       var key = window.event.keyCode;
       if (key == 13 || key == 100) {
-        _self.handleSubmit('formInline')
+        _self.handleSubmit("formInline");
         // _self.handleSubmit2("ruleForm2");
       }
     };
@@ -180,17 +182,22 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          localStorage.setItem("Authorization", "123");
-
           if (this.username) {
             let user = localStorage.getItem("userName")
               ? JSON.parse(localStorage.getItem("userName"))
               : [];
-            user.push(this.formInline.user);
+            user.push(this.formInline.loginame);
             user = [...new Set(user)];
             localStorage.setItem("userName", JSON.stringify(user));
           }
-          this.$router.push("/");
+          this.$store
+            .dispatch("logint", this.formInline)
+            .then((res) => {
+              this.$router.push({ path: this.redirect || "/" });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         } else {
           this.$Message.error("Fail!");
         }

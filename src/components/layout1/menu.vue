@@ -1,9 +1,21 @@
 <template>
   <div>
-    <Menu active-name="home" theme="dark" width="auto" :class="classmenu">
-      <Input v-model="value" placeholder="搜索" style="width: 100%" />
+    <Menu
+      active-name="home"
+      theme="dark"
+      width="auto"
+      :class="classmenu"
+      :open-names="openName"
+      :active-name="activeName"
+    >
+      <Input
+        v-model="value"
+        placeholder="搜索"
+        style="width: 100%"
+        @input="search"
+      />
 
-      <template v-for="(menuItem, menuIndex) in menuList">
+      <template v-for="(menuItem, menuIndex) in search">
         <MenuItem
           v-if="!menuItem.children || menuItem.children.length == 0"
           :key="menuIndex"
@@ -40,10 +52,35 @@ export default {
     return {
       value: "",
       menuList: [],
+      openName: ["home"],
+      activeName: "home",
     };
   },
+
   mounted() {
     this.menuList = menuList;
+  },
+  computed: {
+    search() {
+      if (!this.value) {
+        return menuList;
+      } else {
+        let ary = [];
+        this.menuList.map((e) => {
+          if (e.name.search(this.value) !== -1) {
+            ary.push(e);
+          }
+          if (e.children && e.children.length > 0) {
+            e.children.map((item) => {
+              if (item.name.search(this.value) !== -1) {
+                ary.push(item);
+              }
+            });
+          }
+        });
+        return ary;
+      }
+    },
   },
 };
 </script>
