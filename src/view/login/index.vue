@@ -139,7 +139,7 @@ export default {
       var key = window.event.keyCode;
       if (key == 13 || key == 100) {
         _self.handleSubmit("formInline");
-        // _self.handleSubmit2("ruleForm2");
+
       }
     };
   },
@@ -192,12 +192,10 @@ export default {
           }
           this.$store
             .dispatch("logint", this.formInline)
-            .then((res) => {
-              this.$router.push({ path: this.redirect || "/" });
+            .then(res=> {
+               this.$router.push({ path: this.redirect || "/" });
             })
-            .catch((error) => {
-              console.log(error);
-            });
+            
         } else {
           this.$Message.error("Fail!");
         }

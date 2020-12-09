@@ -5,6 +5,29 @@ export const menuList = [
         to: "/",
         icon: "md-home"
     },
+    {
+        name: "系统管理",
+        value: 'role',
+        to: "/role",
+        icon: "ios-settings",
+        children: [
+            {
+                name: "菜单管理",
+                value: "menu",
+                to: '/menu'
+            },
+            {
+                name: "用户管理",
+                value: "user",
+                to: '/user'
+            },
+            {
+                name: "角色管理",
+                value: "role",
+                to: '/role'
+            },
+        ]
+    },
     // {
     //     name: "数据维护",
     //     value: 'data_maintain',

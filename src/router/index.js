@@ -26,6 +26,33 @@ export const constantRoutes = [
     name: 'login',
     component: () => import('@/view/login/index'),
   },
+  {
+    path: '/role',
+    name: 'role',
+    component: () => import('@/view/role/role'),
+    meta:{
+      requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+      title:'角色管理'
+    }
+  },
+  {
+    path: '/menu',
+    name: 'menu',
+    component: () => import('@/view/role/menu'),
+    meta:{
+      requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+      title:'菜单管理'
+    }
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import('@/view/role/user'),
+    meta:{
+      requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+      title:'用户管理'
+    }
+  },
 
 
 ]

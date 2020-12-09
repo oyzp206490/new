@@ -16,12 +16,14 @@ export default new Vuex.Store({
     },
 
     actions: {
-        logint({ commit }, val) {
+        async logint({ commit }, val) {
             return new Promise((resolve, reject) => {
                 login(val).then(res => {
-                    commit('SET_TOKEN',res)
-                    local.setToken('token',res.token)
-                    resolve(res)
+                    if (res.code == 200) {
+                        commit('SET_TOKEN', res)
+                        local.setToken('token', res.token)
+                        resolve(res)
+                    } 
                 }).catch(error => {
                     reject(error)
                 })
