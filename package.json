@@ -16,6 +16,7 @@
     "axios": "^0.20.0",
     "iview": "^3.5.4",
     "less-loader": "^4.1.0",
+    "qs": "^6.10.1",
     "style-loader": "^2.0.0",
     "view-design": "^4.4.0",
     "vue": "^2.5.2",

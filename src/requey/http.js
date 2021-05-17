@@ -1,6 +1,7 @@
 import axios from 'axios'; // 引入axios
 import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据，后面会提到
 import store from '@/store/index';
+import local from '../local/index'
 import { Message } from 'view-design';
 
 if (process.env.NODE_ENV == 'development') {
@@ -23,9 +24,9 @@ axios.interceptors.request.use(
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断 
         // const token = store.state.token;
         // token && (config.headers.Authorization = token);
-        const token = localStorage.getItem('Authorization');
+        const token = localStorage.getItem('token');
         if (token) {
-            config.headers['Authorization'] = token;
+            config.headers['token'] = token;
             return config
         }
         return config;
@@ -47,7 +48,7 @@ axios.interceptors.response.use(
 					break;
 				case 401:
 					// localStorage.clear();
-					localStorage.removeItem('token');
+					local.removeToken('token');
 					// store.commit('loginSuccess', null);
 					router.replace({
 						path: '/login',

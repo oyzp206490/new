@@ -161,11 +161,11 @@ export default {
     },
     check(val) {
       if (val) {
-        this.$nextTick(() => {
-          if (localStorage.getItem("Authorization")) {
-            this.$router.push("/");
-          }
-        });
+        // this.$nextTick(() => {
+        //   if (localStorage.getItem("Authorization")) {
+        //     this.$router.push("/");
+        //   }
+        // });
       }
     },
     logn(val) {
@@ -193,9 +193,11 @@ export default {
           this.$store
             .dispatch("logint", this.formInline)
             .then(res=> {
-               this.$router.push({ path: this.redirect || "/" });
-            })
             
+                this.$router.push({ path: this.redirect || "/" });
+             
+            })
+           
         } else {
           this.$Message.error("Fail!");
         }

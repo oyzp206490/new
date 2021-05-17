@@ -5,10 +5,13 @@ import App from './App'
 import router from './router/index'
 import store from './store/index'
 import ViewUI from 'view-design';
-import i18n from "./language"
+
+import i18n from "./language";
 import 'view-design/dist/styles/iview.css';
 
 import less from 'less'
+
+import './permission.js';
 Vue.use(less)
 Vue.use(ViewUI);
 Vue.config.productionTip = false
